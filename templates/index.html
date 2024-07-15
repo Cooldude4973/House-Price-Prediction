@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Price Predictor</title>
+    <link rel="stylesheet" href="static\styles.css">
+    <script src="https://kit.fontawesome.com/e20092b283.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+</head>
+
+<body>
+    <div class="background-container">
+
+        <div class="navbar">
+            <a href="#home">Home</a>
+            <a href="#services">Property</a>
+            <a href="#logo"><img src="Logo_nobg2.png" id="navbar_logo" alt="#"></a> <!-- Website logo -->
+            <a href="#about">About us</a>
+            <a href="#contact">Contact us</a>
+        </div>
+        <div class="content">
+            <div class="head">
+                <p class="header1 top" id="heading1">Simplify Your House Price Predictions in <span>New York</span>,
+                    with</p>
+                <p class="header1 top" id="heading2"><span>PriceWise</span> Prophecy!</p>
+            </div>
+
+        </div>
+        <div class="mainContent">
+            <!-- <div class="box"> -->
+            <div class="card-body mycard">
+                <div class="col-12" style="text-align: center">
+                    <h5>This app predicts the price of a car you want to sell. Try filling the details below: </h5>
+                </div>
+                <br>
+                <form method="post" accept-charset="utf-8" name="Modelform">
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter Area of the plot(sqft) : </b> </label><br>
+                        <input type="number" class="form-control" id="area_plot" name="area_plot"
+                            placeholder="Enter the area of the plot ">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select Building type :</b> </label><br>
+                        <select class="selectpicker form-control" id="type" name="type" required="1">
+                            {% for Bld in BldgType %}
+                            <option value="{{ Bld }}">{{ Bld }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select Building Condition :</b> </label><br>
+                        <select class="selectpicker form-control" id="condition" name="condition" required="1">
+                            {% for cnd in OverallCond %}
+                            <option value="{{ cnd }}">{{ cnd }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select Year of Built:</b> </label><br>
+                        <select class="selectpicker form-control" id="year_built" name="year_built" required="1">
+                            {% for year in YearBuilt %}
+                            <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select Year of Renovations : </b> </label><br>
+                        <select class="selectpicker form-control" id="year_renov" name="year_renov" required="1">
+                            {% for year in YearRemodAdd %}
+                            <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter Area of the Basement(sqft) : </b> </label><br>
+                        <input type="text" class="form-control" id="area_base" name="area_base"
+                            placeholder="Enter the area of the plot ">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <button class="btn btn-light btn-primary form-control" onclick="send_data()">Predict
+                            Price</button>
+                    </div>
+                </form>
+                <br>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        <h4><span id="prediction"></span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lastcontainer">
+        <div class="leftcontainerlast">
+            <p class="lasthead">PriceWise</p>
+            <p class="lasttext">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis eius,
+                exercitationem
+                suscipit repudiandae eos excepturi.</p>
+
+            <p class="lasttext loc"><i class="fa-solid fa-location-dot locationpin"></i> &nbsp;&nbsp;&nbsp;&nbsp;JL
+                Soedirman no 45 , Jakarta Selaton , Indonesia .</p>
+        </div>
+        <div class="rightcontainerlast">
+            <div class="rightinside">
+                <div class="feature">
+                    <p class="righthead"><i class="fa-solid fa-building"></i> Facility</p>
+                    <ul class="list">
+                        <li class="listitems">Residential Property</li>
+                        <li class="listitems">Commercial Property</li>
+                        <li class="listitems">Mixed-use Property</li>
+                        <li class="listitems">Bungalows</li>
+
+                    </ul>
+                </div>
+                <!-- <div class="feature">
+                    <p class="righthead"><i class="fa-solid fa-mug-hot"></i> Products</p>
+                    <ul class="list">
+                        <li class="listitems"></li>
+                        <li class="listitems">Iced Coffee</li>
+                        <li class="listitems">Cream Coffee</li>
+                        <li class="listitems">Butter Coffee</li>
+                        <li class="listitems">Butter Milk</li>
+                        <li class="listitems">Cold Coffee</li>
+                    </ul>
+                </div> -->
+                <div class="feature">
+                    <p class="righthead"><i class="fa-solid fa-compass"></i> Locations</p>
+                    <ul class="list">
+                        <li class="listitems">Pune</li>
+                        <li class="listitems">Mumbai</li>
+                        <li class="listitems">Delhi</li>
+                        <li class="listitems">Indore</li>
+                        <li class="listitems">Chennai</li>
+                        <li class="listitems">Kolkatta</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="lasthr">
+            <div class="rights"><i class="fa-regular fa-copyright"></i> 2024 PriceWise . All right reserved .</div>
+        </div>
+    </div>
+    <script>
+        function form_handler(event) {
+            event.preventDefault(); // Don't submit the form normally
+        }
+        function send_data() {
+            document.querySelector('form').addEventListener("submit", form_handler);
+
+            var fd = new FormData(document.querySelector('form'));
+
+            var xhr = new XMLHttpRequest({ mozSystem: true });
+
+            xhr.open('POST', '/predict', true);
+            document.getElementById('prediction').innerHTML = "Wait! Predicting Price.....";
+            xhr.onreadystatechange = function () {
+                // console.log('Running ..');
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    // console.log('ready');
+                    document.getElementById('prediction').innerHTML = "Prediction: ₹" + xhr.responseText;
+
+                }
+            };
+
+            xhr.onload = function () { };
+
+            xhr.send(fd);
+        }
+    </script>
+</body>
+
+
+</html>

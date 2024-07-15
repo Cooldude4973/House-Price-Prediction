@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Predictor</title>
+    <!-- <link rel="stylesheet" href="C:\Users\Sahil Chalke\OneDrive\Desktop\ML Projects\Car Price Prediction\static\styles.css"> -->
+    <link rel="stylesheet" href="static\styles.css">
+    <script src="https://kit.fontawesome.com/e20092b283.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+</head>
+
+<body>
+    <div class="background-container">
+
+        <div class="navbar">
+            <a href="#home">Home</a>
+            <a href="#services">Car</a>
+            <a href="#logo"><img src="static\Logo2-nobg.png" id="navbar_logo" alt="#"></a> <!-- Website logo -->
+            <a href="#about">About us</a>
+            <a href="#contact">Contact us</a>
+        </div>
+        <div class="content">
+            <div class="head">
+                <p class="header1 top" id="heading1">Simplify Your Car Price Predictions with</p>
+                <p class="header1 top" id="heading2"><span>CarValue</span> Prophecy!</p>
+            </div>
+
+        </div>
+        <div class="mainContent ">
+            <div class="card-body mycard ">
+                <div class="col-12">
+                    <h5>This app predicts the price of a car you want to sell.Try filling the details below: </h5>
+                </div>
+                <br>
+                <form method="post" accept-charset="utf-8" name="Modelform">
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select the company:</b> </label><br>
+                        <select class="selectpicker form-control" id="company" name="company" required="1"
+                                onchange="load_car_models(this.id,'car_models')">
+                            {% for company in companies %}
+                            <option value="{{ company }}">{{ company }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select the model:</b> </label><br>
+                        <select class="selectpicker form-control" id="car_models" name="car_models" required="1">
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select Year of Purchase:</b> </label><br>
+                        <select class="selectpicker form-control" id="year" name="year" required="1">
+                            {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select the Fuel Type:</b> </label><br>
+                        <select class="selectpicker form-control" id="fuel_type" name="fuel_type" required="1">
+                            {% for fuel in fuel_types %}
+                            <option value="{{ fuel }}">{{ fuel }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the Number of Kilometres that the car has travelled:</b> </label><br>
+                        <input type="text" class="form-control" id="kilo_driven" name="kilo_driven"
+                               placeholder="Enter the kilometres driven ">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <button  class="form-control mybtn" onclick="send_data()">Predict Price</button>
+                    </div>
+                </form>
+                <br>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        <h4><span id="prediction"></span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lastcontainer">
+        <div class="leftcontainerlast">
+            <p class="lasthead">PriceWise</p>
+            <p class="lasttext">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis eius,
+                exercitationem
+                suscipit repudiandae eos excepturi.</p>
+
+            <p class="lasttext loc"><i class="fa-solid fa-location-dot locationpin"></i> &nbsp;&nbsp;&nbsp;&nbsp;JL
+                Soedirman no 45 , Jakarta Selaton , Indonesia .</p>
+        </div>
+        <div class="rightcontainerlast">
+            <div class="rightinside">
+                <div class="feature">
+                    <p class="righthead"><i class="fa-solid fa-building"></i> Facility</p>
+                    <ul class="list">
+                        <li class="listitems">Residential Property</li>
+                        <li class="listitems">Commercial Property</li>
+                        <li class="listitems">Mixed-use Property</li>
+                        <li class="listitems">Bungalows</li>
+                
+                    </ul>
+                </div>
+                <!-- <div class="feature">
+                    <p class="righthead"><i class="fa-solid fa-mug-hot"></i> Products</p>
+                    <ul class="list">
+                        <li class="listitems"></li>
+                        <li class="listitems">Iced Coffee</li>
+                        <li class="listitems">Cream Coffee</li>
+                        <li class="listitems">Butter Coffee</li>
+                        <li class="listitems">Butter Milk</li>
+                        <li class="listitems">Cold Coffee</li>
+                    </ul>
+                </div> -->
+                <div class="feature">
+                    <p class="righthead"><i class="fa-solid fa-compass"></i> Locations</p>
+                    <ul class="list">
+                        <li class="listitems">Pune</li>
+                        <li class="listitems">Mumbai</li>
+                        <li class="listitems">Delhi</li>
+                        <li class="listitems">Indore</li>
+                        <li class="listitems">Chennai</li>
+                        <li class="listitems">Kolkatta</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="lasthr">
+            <div class="rights"><i class="fa-regular fa-copyright"></i> 2024 PriceWise . All right reserved .</div>
+        </div>
+    </div>
+    <script>
+
+        function load_car_models(company_id,car_model_id)
+        {
+            var user_company=document.getElementById(company_id);
+            var car_model= document.getElementById(car_model_id);
+            // console.log(company.value);
+            // console.log(car_model.value);
+            // console.log(company.value);
+            car_model.value="";
+            car_model.innerHTML="";
+            {% for company in companies %}
+                // console.log("{{company}}");
+                
+                if( user_company.value == "{{ company }}")
+                {
+                    {% for model in car_models %}
+                        {% if company in model %}
+                            // console.log(typeof company);
+                            // console.log(typeof model);
+                            var newOption= document.createElement("option");
+                            newOption.value="{{ model }}";
+                            newOption.innerHTML="{{ model }}";
+                            car_model.options.add(newOption);
+                        {% endif %}
+                    {% endfor %}
+                }
+            {% endfor %}
+        }
+    
+        function form_handler(event) {
+            event.preventDefault(); // Don't submit the form normally
+        }
+        function send_data()
+        {
+            document.querySelector('form').addEventListener("submit",form_handler);
+    
+            var fd=new FormData(document.querySelector('form'));
+    
+            var xhr= new XMLHttpRequest({mozSystem: true});
+    
+            xhr.open('POST','/predict',true);
+            document.getElementById('prediction').innerHTML="Wait! Predicting Price.....";
+            xhr.onreadystatechange = function(){
+                // console.log('Running ..');
+                if(xhr.readyState == XMLHttpRequest.DONE){
+                    // console.log('ready');
+                    document.getElementById('prediction').innerHTML="Prediction: ₹"+xhr.responseText;
+    
+                }
+            };
+    
+            xhr.onload= function(){};
+    
+            xhr.send(fd);
+        }
+    </script>
+</body>
+
+</html>
